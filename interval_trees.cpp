@@ -4,28 +4,8 @@
 
 using namespace std;
 
-// Implementing 'node' class
-class Node{
-public:
-	// Key of this node
-	int key;
 
-	// Left and Right pointers to this node
-	Node *left, *right;
 
-	// Constructor Method
-	Node(int key = 0){
-		this->key = key;
-		this->left = NULL;
-		this->right = NULL;
-	}
-
-	// Destructor
-	~Node(){
-
-	}
-	
-};
 
 // Interval Class
 class Interval{
@@ -72,19 +52,95 @@ public:
 	}
 };
 
+// Implementing 'node' class
+class Node{
+public:
+	// Key of this node
+	int key;
+
+	// Augmented Data
+	Interval *interval;
+	int max;
+
+	// Left and Right pointers to this node
+	Node *left, *right;
+
+	// Constructor Method
+	Node(Interval *i){  			// Initialization of -
+		this->interval = i;			// Interval
+		this->max = i->high;			// 'max' end of interval
+		this->key = i->low;			// 'key' of tree
+		this->left = NULL;			// 'left' pointer
+		this->right = NULL;			// 'right' pointer
+	}
+
+	// Destructor
+	~Node(){
+
+	}
+	
+};
+
+// Implementing the Binary Search Tree
+class BST{
+public:
+	// Handle of 'BST'
+	Node *root;
+
+	// Constructor
+	BST(){
+		root = NULL;
+	}
+
+	// Dictionary Operations
+
+	// Insert an interval 'i' to the BST
+	// keyed with lower end of interval.
+	//
+	// Returns none.
+	void insert(Interval i);
+
+
+
+	// Delete in interval 'i' that is 
+	// exactly matches with an interval
+	// node in the tree. If more than
+	// one nodes match then only FIRST
+	// matched node is deleted.
+	//
+	// Returns none
+	void remove(Interval i);
+
+
+
+	// Searches in the BST an interval node
+	// which has intersection with given
+	// interval. If more than one intervals
+	// match (i.e. intersect) then only
+	// FIRST found node is returned.
+	//
+	// Returns the intersection of two intervals
+	Interval search(Interval i);
+
+	
+
+	// Finds if the any node in BST exactly
+	// matches up with the given node.
+	//
+	// Returns 'true' if found else 'false'
+	void find(Interval i);
+
+};
+
 // Main function
 int main(){
 
 	cout << "Hello Gtm" << endl;
 
-	Interval temp(1, 4), demo(1,1);
-	cout << temp.low << " " << temp.high << endl;
-	cout << demo.low << " " << demo.high << endl;
-
-	cout << temp.equals(demo) << endl << endl;
-	Interval common = temp.intersection(demo);
-	cout << common.low << " " << common.high << endl;
-	
+Interval temp(32,2);
+cout << temp.low << " " << temp.high << endl;
+Node node(&temp);
+cout << node.key << " " << node.max << endl;
 
 	getch();
 	return 0;
