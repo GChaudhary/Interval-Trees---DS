@@ -1,6 +1,6 @@
 #include <iostream>
 #include <algorithm>
-#include <conio.h>
+//#include <conio.h>
 
 using namespace std;
 
@@ -94,11 +94,67 @@ public:
 
 	// Dictionary Operations
 
+	// Display the BST
+	//
+	// Returns nothing. (Only prints)
+	void display(){
+		if(root == NULL)
+			cout << "Tree is EMPTY" << endl;
+		else
+			inorder(root);
+	}
+
+
+	// Inorder Traversal of BST
+	//
+	// Returns nothing. (Only prints)
+	void inorder(Node *subRoot){
+		if(subRoot == NULL)
+			return;
+
+		inorder(subRoot->left);
+		cout << (subRoot->interval)->low << " to " << (subRoot->interval)->high << ", \t|| Key: " << subRoot->key << endl;		
+		inorder(subRoot->right);
+	}
+
+
 	// Insert an interval 'i' to the BST
 	// keyed with lower end of interval.
 	//
 	// Returns none.
-	void insert(Interval i);
+	void insert(Interval *i){
+		if( root == NULL){	// If the tree is EMPTY
+			root = new Node(i);
+		}
+		else{				// If the tree is NON-EMPTY
+			Node *tempPointer = root;
+
+			int terminate = 0;
+			// Traverse to the last node where
+			// new node is to be added (similar
+			// to insertion in binary tree).
+			while(terminate != 1){
+				if((i->low) < (tempPointer->key)){		// In the LEFT
+					if(tempPointer->left == NULL){
+						tempPointer->left = new Node(i);
+						terminate = 1;
+					}
+					else{
+						tempPointer = tempPointer->left;
+					}
+				}
+				else{									// In the RIGHT
+					if(tempPointer->right == NULL){
+						tempPointer->right = new Node(i);
+						terminate = 1;
+					}
+					else{
+						tempPointer = tempPointer->right;
+					}
+				}
+			}
+		}
+	}
 
 
 
@@ -137,11 +193,23 @@ int main(){
 
 	cout << "Hello Gtm" << endl;
 
-Interval temp(32,2);
-cout << temp.low << " " << temp.high << endl;
-Node node(&temp);
-cout << node.key << " " << node.max << endl;
 
-	getch();
+BST *demoIntervalTree = new BST();
+demoIntervalTree->display();
+
+Interval *temp = new Interval(3,6);
+demoIntervalTree->insert(temp);
+
+temp = new Interval(4,5);
+demoIntervalTree->insert(temp);
+
+temp = new Interval(2,9);
+demoIntervalTree->insert(temp);
+
+temp = new Interval(3,-9);
+demoIntervalTree->insert(temp);
+
+demoIntervalTree->display();
+//	getch();
 	return 0;
 }
