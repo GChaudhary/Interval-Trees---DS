@@ -244,25 +244,23 @@ public:
 	bool find(Interval i){
 		// Move inOrder to search for interval
 		int count = 0;
-		if(!isEmpty()){ 	//Tree is not empty
-			inorderFind(root, i, &count);
+
+		Node *temp = root;
+		while (temp != NULL){
+			// Check if current node interval equal the given interval
+			if(i.equals(*(temp->interval))){
+				count = count + 1;
+				break;
+			}
+			// Else move to LEFT
+			else if(i.low < temp->key)
+				temp = temp->left;
+			// Else move to RIGHT
+			else
+				temp = temp->right;
 		}
 
 		return (count > 0);
-	}
-
-
-	// Inorder Traversal of BST for FIND
-	//
-	// Returns nothing. (Only prints)
-	void inorderFind(Node *subRoot, Interval i, int *count){
-		if(subRoot == NULL)
-			return;
-
-		inorderFind(subRoot->left, i, count);
-		if(i.equals(*(subRoot->interval)))
-			*count = *count + 1;
-		inorderFind(subRoot->right, i, count);
 	}
 
 
@@ -291,7 +289,7 @@ demoIntervalTree->insert(temp);
 
 demoIntervalTree->display();
 
-Interval abc(7,9), cde(1,0);
+Interval abc(-8,3), cde(1,0);
 cout << demoIntervalTree->find(abc) << endl;
 
 Interval result = demoIntervalTree->search(abc);
