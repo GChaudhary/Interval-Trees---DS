@@ -119,7 +119,7 @@ public:
 			return;
 
 		inorderDisplay(subRoot->left);
-		cout << (subRoot->interval)->low << " to " << (subRoot->interval)->high << ", \t|| Key: " << subRoot->key << endl;		
+		cout << (subRoot->interval)->low << " to " << subRoot->interval->high << ", \t|| Key: " << subRoot->key << "\t||Max: " << subRoot->max << endl;		
 		inorderDisplay(subRoot->right);
 	}
 
@@ -140,16 +140,16 @@ public:
 			// new node is to be added (similar
 			// to insertion in binary tree).
 			while(terminate != 1){
+				// Update the 'max' value of 'current' node, if needed
+				if( (tempPointer->max) < (i->high) )
+					(tempPointer->max) = (i->high);
+
 				if((i->low) < (tempPointer->key)){		// In the LEFT
 					if(tempPointer->left == NULL){
 						tempPointer->left = new Node(i);
 						terminate = 1;
 					}
 					else{
-						// Update the 'max' value of 'current' node, if needed
-						if( (tempPointer->max) < (i->high) )
-							(tempPointer->max) = (i->high);
-
 						// Move to LEFT
 						tempPointer = tempPointer->left;
 					}
@@ -160,10 +160,6 @@ public:
 						terminate = 1;
 					}
 					else{
-						// Update the 'max' value of 'current' node, if needed
-						if( (tempPointer->max) < (i->high) )
-							(tempPointer->max) = (i->high);
-
 						// Move to RIGHT
 						tempPointer = tempPointer->right;
 					}
@@ -184,19 +180,126 @@ public:
 	// Returns none
 	void remove(Interval i){
 		Node *temp = root;
+		Node *p_temp = root;
 		while(temp != NULL){
 			// Check if 'i' equals current node
 			if( i.equals(*(temp->interval))){
 				// Remove current node
+				if(temp == root){	// If only 'root' is to be deleted
+					
+				// Case 1: If root node has NO children
+					if((temp->left == NULL)&&(temp->right == NULL))
+					{	root = NULL;	}
+
+				// Case 2: If root node has TWO children
+					// Replace 'root' node with lowest node from right sub-tree
+					else if((temp->left != NULL)&&(temp->right != NULL)){
+						Node *p_lowest = temp->right;
+						
+						if( p_lowest->left == NULL){
+							p_lowest->left = temp->left;
+							root = p_lowest;
+						}
+						else{
+							// Get the parent of node with minimum key in right sub-tree
+							while(p_lowest->left->left != NULL)
+							{	p_lowest = p_lowest->left;	}
+
+							Node *lowest = p_lowest->left;
+
+							// If 'lowest' node has a RIGHT child, assign it to the LEFT of P_Lowest
+							if(lowest->right != NULL){
+								p_lowest->left = lowest->right;
+							}
+
+							// Make 'lowest' as 'root' node
+							lowest->left = temp->left;
+							lowest->right = temp->right;
+							root = lowest;
+						}
+					}
+					
+				// Case 3: If root node has ONE children
+					else{
+						if(temp->left != NULL)
+							root = temp->left;
+						else
+							root = temp->right;
+					}
+				}
+				else{// If 'non-root' is to be deleted
+	
+				// Case 1: If non-root node has NO children
+					if((temp->left == NULL)&&(temp->right == NULL))
+					{	
+						if(p_temp->left == temp)
+							p_temp->left == NULL;
+						else
+							p_temp->right == NULL;
+					}
+
+				// Case 2: If root node has TWO children
+					// Replace 'non-root' node with lowest node from right sub-tree
+					else if((temp->left != NULL)&&(temp->right != NULL)){
+						Node *p_lowest = temp->right;
+						
+						if( p_lowest->left == NULL){
+							p_lowest->left = temp->left;
+							
+							if(p_temp->left == temp)
+								p_temp->left == p_lowest;
+							else
+								p_temp->right == p_lowest;
+						}
+						else{
+							// Get the parent of node with minimum key in right sub-tree
+							while(p_lowest->left->left != NULL)
+							{	p_lowest = p_lowest->left;	}
+
+							Node *lowest = p_lowest->left;
+
+							// If 'lowest' node has a RIGHT child, assign it to the LEFT of P_Lowest
+							if(lowest->right != NULL){
+								p_lowest->left = lowest->right;
+							}
+
+							// Make 'lowest' as 'root' node
+							lowest->left = temp->left;
+							lowest->right = temp->right;
+							
+							if(p_temp->left == temp)
+								p_temp->left == lowest;
+							else
+								p_temp->right == NULL;
+						}
+					}
+					
+				// Case 3: If 'non-root' node has ONE children
+					else{
+						if(p_temp->left == temp)
+							if(temp->left != NULL)
+								p_temp->left = temp->left;
+							else
+								p_temp->left = temp->right;
+						else
+							if(temp->left != NULL)
+								p_temp->right = temp->left;
+							else
+								p_temp->right = temp->right;
+					}
+				}
 
 				cout << "Node removed" << endl;
+				break;
 			}
 			else if(i.low < (temp->key)) // Move to LEFT sub-tree
 			{
+				p_temp = temp;
 				temp = temp->left;
 			}
 			else	// Move to RIGHT sub-tree
 			{
+				p_temp = temp;
 				temp = temp->right;
 			}
 		}
@@ -274,7 +377,7 @@ int main(){
 
 BST *demoIntervalTree = new BST();
 demoIntervalTree->display();
-
+/*
 Interval *temp = new Interval(3,6);
 demoIntervalTree->insert(temp);
 
@@ -295,6 +398,23 @@ cout << demoIntervalTree->find(abc) << endl;
 Interval result = demoIntervalTree->search(abc);
 cout << result.low << " to " << result.high << endl;
 
+*/
+Interval *temp = new Interval(1,8);
+demoIntervalTree->insert(temp);
+
+temp = new Interval(3,7);
+demoIntervalTree->insert(temp);
+
+temp = new Interval(4,10);
+demoIntervalTree->insert(temp);
+
+temp = new Interval(2,4);
+demoIntervalTree->insert(temp);
+
+Interval i(2,4);
+demoIntervalTree->display();
+demoIntervalTree->remove(i);
+demoIntervalTree->display();
 
 //	getch();
 	return 0;
