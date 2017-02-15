@@ -30,7 +30,7 @@ public:
 
 	// Check if two intervals have 'intersection'
 	bool intersects(Interval i){
-		if(( high < i.low )||( i.high < low ))
+		if(( high < i.low )||( i.high < low ))		// Non-Intersectin condition
 			return false;
 		return true;
 	}
@@ -107,20 +107,20 @@ public:
 		if(isEmpty())
 			cout << "Tree is EMPTY" << endl;
 		else
-			inorder(root);
+			inorderDisplay(root);
 	}
 
 
 	// Inorder Traversal of BST
 	//
 	// Returns nothing. (Only prints)
-	void inorder(Node *subRoot){
+	void inorderDisplay(Node *subRoot){
 		if(subRoot == NULL)
 			return;
 
-		inorder(subRoot->left);
+		inorderDisplay(subRoot->left);
 		cout << (subRoot->interval)->low << " to " << (subRoot->interval)->high << ", \t|| Key: " << subRoot->key << endl;		
-		inorder(subRoot->right);
+		inorderDisplay(subRoot->right);
 	}
 
 
@@ -181,8 +181,30 @@ public:
 	// match (i.e. intersect) then only
 	// FIRST found node is returned.
 	//
-	// Returns the intersection of two intervals
-	Interval search(Interval i);
+	// Returns the 'interval' that intersect
+	// with the given interval 'i'.
+	Interval search(Interval i){
+		// Interval to be returned
+		Interval *result = new Interval(0,0);
+
+		Node *temp = root;
+		while( temp != NULL){
+			// Check if 'i' intersects with current node
+			if(i.intersects(*(temp->interval))){
+				*result = *(temp->interval);
+				break;
+			}
+			else if( i.high < (*(temp->interval)).low ){ // Move to LEFTsub-tree
+				temp = temp->left;
+			}
+			else{	// Move to RIGHT sub-tree
+				temp = temp->right;
+			}
+		}
+
+		return *result;
+	}
+
 
 	
 
@@ -229,7 +251,7 @@ demoIntervalTree->display();
 Interval *temp = new Interval(3,6);
 demoIntervalTree->insert(temp);
 
-temp = new Interval(4,5);
+temp = new Interval(4,15);
 demoIntervalTree->insert(temp);
 
 temp = new Interval(2,9);
@@ -240,8 +262,14 @@ demoIntervalTree->insert(temp);
 
 demoIntervalTree->display();
 
-Interval abc(2,9);
+Interval abc(7,9), cde(1,0);
 cout << demoIntervalTree->find(abc) << endl;
+
+Interval result = demoIntervalTree->search(abc);
+cout << result.low << " to " << result.high << endl;
+
+cout << abc.intersects(cde) << endl;
+
 //	getch();
 	return 0;
 }
