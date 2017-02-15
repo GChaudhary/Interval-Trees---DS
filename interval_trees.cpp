@@ -146,6 +146,11 @@ public:
 						terminate = 1;
 					}
 					else{
+						// Update the 'max' value of 'current' node, if needed
+						if( (tempPointer->max) < (i->high) )
+							(tempPointer->max) = (i->high);
+
+						// Move to LEFT
 						tempPointer = tempPointer->left;
 					}
 				}
@@ -155,11 +160,17 @@ public:
 						terminate = 1;
 					}
 					else{
+						// Update the 'max' value of 'current' node, if needed
+						if( (tempPointer->max) < (i->high) )
+							(tempPointer->max) = (i->high);
+
+						// Move to RIGHT
 						tempPointer = tempPointer->right;
 					}
 				}
 			}
 		}
+		cout << "Node inserted" << endl;
 	}
 
 
@@ -171,7 +182,25 @@ public:
 	// matched node is deleted.
 	//
 	// Returns none
-	void remove(Interval i);
+	void remove(Interval i){
+		Node *temp = root;
+		while(temp != NULL){
+			// Check if 'i' equals current node
+			if( i.equals(*(temp->interval))){
+				// Remove current node
+
+				cout << "Node removed" << endl;
+			}
+			else if(i.low < (temp->key)) // Move to LEFT sub-tree
+			{
+				temp = temp->left;
+			}
+			else	// Move to RIGHT sub-tree
+			{
+				temp = temp->right;
+			}
+		}
+	}
 
 
 
@@ -194,7 +223,7 @@ public:
 				*result = *(temp->interval);
 				break;
 			}
-			else if( i.high < (*(temp->interval)).low ){ // Move to LEFTsub-tree
+			else if( i.high < (temp->left)->max ){ // Move to LEFTsub-tree
 				temp = temp->left;
 			}
 			else{	// Move to RIGHT sub-tree
@@ -268,7 +297,6 @@ cout << demoIntervalTree->find(abc) << endl;
 Interval result = demoIntervalTree->search(abc);
 cout << result.low << " to " << result.high << endl;
 
-cout << abc.intersects(cde) << endl;
 
 //	getch();
 	return 0;
