@@ -92,13 +92,19 @@ public:
 		root = NULL;
 	}
 
+
+	// Returns 'true' if tree is EMPTY
+	bool isEmpty(){
+		return (root == NULL);
+	}
+
 	// Dictionary Operations
 
 	// Display the BST
 	//
 	// Returns nothing. (Only prints)
 	void display(){
-		if(root == NULL)
+		if(isEmpty())
 			cout << "Tree is EMPTY" << endl;
 		else
 			inorder(root);
@@ -184,7 +190,30 @@ public:
 	// matches up with the given node.
 	//
 	// Returns 'true' if found else 'false'
-	void find(Interval i);
+	bool find(Interval i){
+		// Move inOrder to search for interval
+		int count = 0;
+		if(!isEmpty()){ 	//Tree is not empty
+			inorderFind(root, i, &count);
+		}
+
+		return (count > 0);
+	}
+
+
+	// Inorder Traversal of BST for FIND
+	//
+	// Returns nothing. (Only prints)
+	void inorderFind(Node *subRoot, Interval i, int *count){
+		if(subRoot == NULL)
+			return;
+
+		inorderFind(subRoot->left, i, count);
+		if(i.equals(*(subRoot->interval)))
+			*count = *count + 1;
+		inorderFind(subRoot->right, i, count);
+	}
+
 
 };
 
@@ -210,6 +239,9 @@ temp = new Interval(3,-9);
 demoIntervalTree->insert(temp);
 
 demoIntervalTree->display();
+
+Interval abc(2,9);
+cout << demoIntervalTree->find(abc) << endl;
 //	getch();
 	return 0;
 }
