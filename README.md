@@ -6,3 +6,6 @@ This file contains implementation of INTERVAL TREES with combined data structure
 2. SEARCH   --> Used to 'search' for overlap of given interval in the BST
 3. REMOVE   --> Used to 'remove' an interval from BST
 4. FIND   --> Used to search if given interval 'exists' in the BST or not
+
+### Following is the screenshot of Output
+![picture](output.png)
