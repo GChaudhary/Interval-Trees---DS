@@ -119,7 +119,7 @@ public:
 			return;
 
 		inorderDisplay(subRoot->left);
-		cout << (subRoot->interval)->low << " to " << subRoot->interval->high << ", \t|| Key: " << subRoot->key << "\t||Max: " << subRoot->max << endl;		
+		cout << (subRoot->interval)->low << " to " << subRoot->interval->high << ", \t||  Key: " << subRoot->key << "\t||  Max: " << subRoot->max << endl;		
 		inorderDisplay(subRoot->right);
 	}
 
@@ -372,12 +372,16 @@ public:
 // Main function
 int main(){
 
-	cout << "Hello Gtm" << endl;
+	cout << "\n\n*****\tHello World\t*****\n" << endl;
 
 
 BST *demoIntervalTree = new BST();
-demoIntervalTree->display();
-/*
+cout << "Interval tree is created.\n" ;
+
+cout << "For demo, we insert the following interval nodes {(3,6), (4,15), (2,9), (-9,3)}" << endl;
+
+// Test cases for INSERT OPERATION
+cout << "\n***\tChecking INSERT OPERATION\t***" << endl;
 Interval *temp = new Interval(3,6);
 demoIntervalTree->insert(temp);
 
@@ -390,32 +394,28 @@ demoIntervalTree->insert(temp);
 temp = new Interval(3,-9);
 demoIntervalTree->insert(temp);
 
+cout << "\n***\tChecking DISPLAY OPERATION\t***" << endl;
+cout << "Inorder display of the tree -" << endl;
 demoIntervalTree->display();
 
-Interval abc(-8,3), cde(1,0);
-cout << demoIntervalTree->find(abc) << endl;
+// Test cases for SEARCH operation
+cout << "\n***\tChecking SEARCH OPERATION\t***" << endl;
+Interval *test_interval = new Interval(0,3);
 
-Interval result = demoIntervalTree->search(abc);
-cout << result.low << " to " << result.high << endl;
+Interval result = demoIntervalTree->search(*test_interval);
+cout << "Interval overlapping with (0,3) is: " << result.low << " to " << result.high << endl;
 
-*/
-Interval *temp = new Interval(1,8);
-demoIntervalTree->insert(temp);
+test_interval = new Interval(12,16);
+result = demoIntervalTree->search(*test_interval);
+cout << "Interval overlapping with (12,16) is: " << result.low << " to " << result.high << endl;
 
-temp = new Interval(3,7);
-demoIntervalTree->insert(temp);
-
-temp = new Interval(4,10);
-demoIntervalTree->insert(temp);
-
-temp = new Interval(2,4);
-demoIntervalTree->insert(temp);
-
-Interval i(2,4);
-demoIntervalTree->display();
-demoIntervalTree->remove(i);
+// Test cases for DELETE OPERATION
+cout << "\n***\tChecking DELETE OPERATION\t***" << endl;
+test_interval = new Interval(3,6);
+demoIntervalTree->remove(*test_interval);
+cout << "\n\nAfter deleting the node (3,6), the resultant tree (in-order) looks like - " << endl;
 demoIntervalTree->display();
 
-//	getch();
+	//getch();
 	return 0;
 }
